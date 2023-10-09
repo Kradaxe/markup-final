@@ -1,16 +1,18 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./login.scss";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Link from "antd/es/typography/Link";
+import { MyContext } from "../../App";
 
 const Login = ({ logged, setLogged }) => {
   const navigate = useNavigate();
+  const { currentImg } = useContext(MyContext);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   async function submit(e) {
-    e.preventDefault();
+    e.preventDefault(); 
     axios
       .post(
         "http://localhost:8000/api/users/logIn",

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import { useParams } from 'react-router-dom';
 
 class ImageComments extends Component {
+
   constructor(props) {
     super(props)
     this.state = {
@@ -8,7 +10,8 @@ class ImageComments extends Component {
       editedCommentIndex: null, // Index of the comment being edited
     }
   }
-
+  // let
+  
   handleImageClick = (e) => {
     const { offsetX, offsetY } = e.nativeEvent
     const newComment = {
@@ -71,12 +74,12 @@ class ImageComments extends Component {
   }
 
   render() {
-    const { comments, editedCommentIndex } = this.state
-
+    const { comments, editedCommentIndex } = this.state;
+    
     return (
       <div className="image-container">
         <img
-          src="images/phototo.webp"
+          src=""
           alt="Your Image"
           onClick={this.handleImageClick}
         />
@@ -117,4 +120,4 @@ class ImageComments extends Component {
   }
 }
 
-export default ImageComments;
+export default ImageComments;

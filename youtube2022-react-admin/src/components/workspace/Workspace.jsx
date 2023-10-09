@@ -1,18 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Searchtab } from "../searchtab/Searchtab";
 import "./workspace.scss";
 import axios from "axios";
+import ImageComments from "../commentsAdd/ImageComments";
+import { useNavigate } from "react-router-dom";
+import { MyContext } from "../../App";
 
 export const Workspace = () => {
   const [image, setImage] = useState("");
   const [allImage, setAllImage] = useState([]);
   const [finalimag, setfinalimag] = useState("");
+  const { currentImg, setCurrentImg } = useContext(MyContext);
+  const navigator = useNavigate();
   const handleFileChange = (e) => {
     setSelectedFile(e.target.files[0]);
   };
-  useEffect(() => {
-    console.log(allImage);
-  }, [allImage]);
 
   const handleUpload = async () => {
     if (selectedFile) {
@@ -20,6 +22,10 @@ export const Workspace = () => {
       formData.append("photo", selectedFile);
       try {
         console.log("nice");
+        const token = localStorage.getItem("token");
+        console.log(token);
+        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
         const response = await axios
           .post("http://localhost:8000/api/upload", formData, {
             headers: {
@@ -27,13 +33,10 @@ export const Workspace = () => {
             },
           })
           .then((response) => {
-            console.log(response.data);
-            localStorage.getItem("token", response.data.token);
-            axios.defaults.headers.common[
-              "Authorization"
-            ] = `Bearer ${response.data.token}`;
+            // console.log(response.data);
+
             console.log(response);
-            setAllImage([...allImage, { src: response.data.photo }]);
+            // setAllImage([...allImage, { src: response.data.photo }]);
           });
         console.log(response.data);
       } catch (error) {
@@ -59,9 +62,14 @@ export const Workspace = () => {
   }
   const [selectedFile, setSelectedFile] = useState(null);
   const [message, setMessage] = useState("");
+  function send(e) {
+    setCurrentImg(e.target.currentSrc);
+    navigator("/ImageComments");
+    // console.log();
+  }
 
-  function getImage() {
-    const response = axios
+  async function getImage() {
+    await axios
       .get("http://localhost:8000/api/posts", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -105,7 +113,9 @@ export const Workspace = () => {
         <button onClick={handleUpload}>Upload</button>
 
         {allImage.map((data, key) => {
-          return <img width={100} height={100} src={data.photo} />;
+          return (
+            <img onClick={send} width={100} height={100} src={data.photo} />
+          );
         })}
       </div>
     </div>

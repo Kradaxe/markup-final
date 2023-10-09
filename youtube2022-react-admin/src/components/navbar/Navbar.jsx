@@ -8,12 +8,19 @@ import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutline
 import ListOutlinedIcon from "@mui/icons-material/ListOutlined";
 import { DarkModeContext } from "../../context/darkModeContext";
 import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Profile } from "../profile/profile";
+import axios from "axios";
 
 const Navbar = ({ logged }) => {
+  const navigate  = useNavigate();
   const { dispatch } = useContext(DarkModeContext);
   const [a, b] = useState(false);
-
+  const handleLogout = async () => {
+    console.log("pro logout");
+   localStorage.removeItem('token');
+   navigate('/login');
+  };
   return (
     <div className="item">
       <div className="dropdown_menu">
@@ -29,7 +36,7 @@ const Navbar = ({ logged }) => {
           <div className="drop_menu">
             <button>Your Profile</button>
             <br />
-            <button>Sign Out</button>
+            <button onClick={handleLogout}>Sign Out</button>
           </div>
         )}
       </div>
